@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">AndroidDecouverte - Alex</string>
+    <string name="home_button">Go !</string>
+    <string name="titre_liste">Liste des élèves</string>
+    <string-array name="spinner_choice_1">
+        <item>Pas de préférences</item>
+        <item>Homme</item>
+        <item>Femme</item>
+    </string-array>
+    <string-array name="spinner_choice_2">
+        <item>Pas de préférences</item>
+        <item>Lunel</item>
+        <item>Béziers</item>
+    </string-array>
+</resources>

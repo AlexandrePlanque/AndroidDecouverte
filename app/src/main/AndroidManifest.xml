@@ -1,0 +1,40 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="tp.a2018.lunel.beweb.fondespierre.fr.androiddecouverte">
+
+    <uses-permission android:name="android.permission.INTERNET">
+
+    </uses-permission>
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".HomeActivity"
+            android:launchMode="standard">
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".ListeActivity"
+            android:launchMode="standard">
+            <intent-filter>
+                <category android:name="android.intent.category.ALTERNATIVE"/>
+                <action android:name="android.intent.action.VIEW"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".DetailActivity"
+            android:launchMode="standard">
+            <intent-filter>
+                <category android:name="android.intent.category.ALTERNATIVE"/>
+                <action android:name="android.intent.action.VIEW"/>
+            </intent-filter>
+        </activity>
+
+    </application>
+</manifest>
