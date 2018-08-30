@@ -39,7 +39,7 @@ public class DetailActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
 
         // initialisation de l'url
-        String url = "http://192.168.1.10/beWeb/api_beweb/index.php/api/eleves/" + id;
+        String url = "http://android.janus-developpement.com/index.php/api/eleves/" + id;
 
         // inititialisation d'un tableau au format JsonArray
         JSONArray jArray = new JSONArray();

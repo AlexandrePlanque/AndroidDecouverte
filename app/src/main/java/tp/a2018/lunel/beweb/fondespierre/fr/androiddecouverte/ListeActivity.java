@@ -15,6 +15,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -75,6 +76,9 @@ public class ListeActivity extends AppCompatActivity {
      //   liste.setAdapter(elevesAdapter);
 
 
+        //appel des deux méthodes permettant d'afficher les deux spinners avec les données provenant de l'API
+        loadDataGenre();
+        loadDataVille();
 
 
 
@@ -83,7 +87,7 @@ public class ListeActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
 
         // initialisation de l'url
-        String url = "http://192.168.1.10/beWeb/api_beweb/index.php/api/eleves";
+        String url = "http://android.janus-developpement.com/index.php/api/eleves";
 
         // inititialisation d'un tableau au format JsonArray (donnees a envoyer sur le serveur)
         JSONArray jArray = new JSONArray();
@@ -107,39 +111,6 @@ public class ListeActivity extends AppCompatActivity {
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET,url,jArray,response,error);
         // a jouter  dans la RequestQueue l'objet JsonArrayRequest
         queue.add(jsonArrayRequest);
-        // afficher en console le nom du premier objet
-
-
-
-/**
- *  Utilisation de deux adapter dédiés à l'affichage correct des spinners afin de leur ajouter
- *  les champs souhaiter pour chacuns d'entre eux
- *
- *  */
-
-        Spinner spinner = (Spinner) findViewById(R.id.spinner4);
-
-        // On instancie un ArrayAdapter utilisant une string array ainsi que le layout des spinner par défaut
-        ArrayAdapter<CharSequence> adapterSpin = ArrayAdapter.createFromResource(this,
-                R.array.spinner_choice_1, android.R.layout.simple_spinner_item);
-        // On précise ici quel layout utiliser lorsque qu'un utilisateur va cliquer sur le spinner.
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Finalement on applique l'adapter à notre spinner
-        spinner.setAdapter(adapterSpin);
-
-
-        Spinner spinner2 = (Spinner) findViewById(R.id.spinner5);
-
-        // On instancie un ArrayAdapter utilisant une string array ainsi que le layout des spinner par défaut
-        ArrayAdapter<CharSequence> adapterSpinTwo = ArrayAdapter.createFromResource(this,
-                R.array.spinner_choice_2, android.R.layout.simple_spinner_item);
-        // On précise ici quel layout utiliser lorsque qu'un utilisateur va cliquer sur le spinner.
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Finalement on applique l'adapter à notre spinner
-        spinner2.setAdapter(adapterSpinTwo);
-
-
-
 
 
 
@@ -168,7 +139,7 @@ public class ListeActivity extends AppCompatActivity {
 
         ListView liste = (ListView)findViewById(R.id.liste_dynamic);
 
-        //on aasigne un listener sur le click des items pour changer d'activité (DetailActivity)
+        //on assigne un listener sur le click des items pour changer d'activité (DetailActivity)
         liste.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -191,4 +162,181 @@ public class ListeActivity extends AppCompatActivity {
 
     }
 
+
+
+    private void loadSpinners(){
+
+        /**
+         *  Utilisation de deux adapter dédiés à l'affichage correct des spinners afin de leur ajouter
+         *  les champs souhaiter pour chacuns d'entre eux
+         *
+         *  */
+
+        Spinner spinner = (Spinner) findViewById(R.id.spinner4);
+
+        // On instancie un ArrayAdapter utilisant une string array ainsi que le layout des spinner par défaut
+        ArrayAdapter<CharSequence> adapterSpin = ArrayAdapter.createFromResource(this,
+                R.array.spinner_choice_1, android.R.layout.simple_spinner_item);
+        // On précise ici quel layout utiliser lorsque qu'un utilisateur va cliquer sur le spinner.
+        adapterSpin.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Finalement on applique l'adapter à notre spinner
+        spinner.setAdapter(adapterSpin);
+
+
+        Spinner spinner2 = (Spinner) findViewById(R.id.spinner5);
+
+        // On instancie un ArrayAdapter utilisant une string array ainsi que le layout des spinner par défaut
+        ArrayAdapter<CharSequence> adapterSpinTwo = ArrayAdapter.createFromResource(this,
+                R.array.spinner_choice_2, android.R.layout.simple_spinner_item);
+        // On précise ici quel layout utiliser lorsque qu'un utilisateur va cliquer sur le spinner.
+        adapterSpinTwo.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Finalement on applique l'adapter à notre spinner
+        spinner2.setAdapter(adapterSpinTwo);
+
+
+
+    }
+
+    public void filterSpinner(){
+
+        Spinner spinner = (Spinner) findViewById(R.id.spinner4);
+
+        // mise en place d'un listener sur la selection des différents choix du menu déroulant
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                JSONObject e = (JSONObject) parent.getItemAtPosition(position);
+                System.err.println(e);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+
+    private void getByFkLieu(String url) {
+
+
+
+    }
+
+
+    public void loadDataVille(){
+
+        // on recupere une RequestQueue venant de Volley
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+        // initialisation de l'url
+        String url = "http://android.janus-developpement.com/index.php/api/villes";
+
+        // inititialisation d'un tableau au format JsonArray (donnees a envoyer sur le serveur)
+        JSONArray jArray = new JSONArray();
+
+        // instance d'un ResponseListennerJsonArray
+        Response.Listener<JSONArray> response = new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                loadDatasSpinnerVille(response);
+            }
+        };
+        // instance d'un ResponseErrorListenner
+        Response.ErrorListener error = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.err.println("erreur");
+            }
+        };
+        // instance d'un JsonArrayRequest en passant en argument les objets créés précédemment
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET,url,jArray,response,error);
+        // a jouter  dans la RequestQueue l'objet JsonArrayRequest
+        queue.add(jsonArrayRequest);
+        // afficher en console le nom du premier objet
+    }
+
+
+    public void loadDataGenre(){
+
+        // on recupere une RequestQueue venant de Volley
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+        // initialisation de l'url
+        String url = "http://android.janus-developpement.com/index.php/api/genres";
+
+        // inititialisation d'un tableau au format JsonArray (donnees a envoyer sur le serveur)
+        JSONArray jArray = new JSONArray();
+
+        // instance d'un ResponseListennerJsonArray
+        Response.Listener<JSONArray> response = new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                loadDatasSpinnerSexe(response);
+
+            }
+        };
+        // instance d'un ResponseErrorListenner
+        Response.ErrorListener error = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.err.println("erreur");
+            }
+        };
+        // instance d'un JsonArrayRequest en passant en argument les objets créés précédemment
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET,url,jArray,response,error);
+        // a jouter  dans la RequestQueue l'objet JsonArrayRequest
+        queue.add(jsonArrayRequest);
+        // afficher en console le nom du premier objet
+    }
+
+
+
+
+
+
+
+
+
+
+    private void loadDatasSpinnerVille(JSONArray tata){
+
+        ArrayList<String> nomVille = new ArrayList<String>();
+        nomVille.add("Pas de préférence");
+
+        for(int i = 0;i<tata.length();i++){
+        JSONObject toto = tata.optJSONObject(i);
+            //ajout de chaque nom de ville dans l'array list afin de l'envoyé à l 'adapter
+            nomVille.add(toto.optString("ville"));
+        }
+
+        Spinner spinner = (Spinner) findViewById(R.id.spinner4);
+        System.err.println(nomVille);
+
+        spinner.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, nomVille));
+
+
+    }
+
+
+    private void loadDatasSpinnerSexe(JSONArray tutu){
+
+        ArrayList<String> genre = new ArrayList<String>();
+        //ajout d'un choix par défaut.
+        genre.add("Pas de préférence");
+
+        for(int i = 0;i<tutu.length();i++){
+            //ajout du genre courant de la liste dans l'array liste prévu à cet effet
+            genre.add(tutu.optString(i));
+
+        }
+
+        Spinner spinner = (Spinner) findViewById(R.id.spinner5);
+
+        //On applique un adapter à notre spinner afin d'y intégré les valeurs de notre array list dynamiquement.
+        spinner.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, genre));
+
+
+    }
 }
+
